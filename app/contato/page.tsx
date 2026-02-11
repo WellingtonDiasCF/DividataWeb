@@ -10,7 +10,7 @@ import {
   Clock, 
   ArrowRight,
   CheckCircle2,
-  Building2 // Agora incluído corretamente
+  Building2 
 } from "lucide-react";
 
 export default function ContatoPage() {
@@ -77,7 +77,7 @@ export default function ContatoPage() {
             {/* COLUNA DA ESQUERDA: INFORMAÇÕES DE CONTATO (4 COLUNAS) */}
             <div className="lg:col-span-4 space-y-6">
               
-              {/* Card de Endereço */}
+              {/* Card de Endereço (ATUALIZADO) */}
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -89,13 +89,14 @@ export default function ContatoPage() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Sede Administrativa</h3>
                 <p className="text-slate-600 text-sm leading-relaxed">
-                  Av. Antônio Olímpio de Morais, 545<br />
-                  Centro, Divinópolis - MG<br />
-                  CEP: 35500-005
+                  Praça Benedito Valadares, 84<br />
+                  Sobre Loja, Centro<br />
+                  Divinópolis - MG<br />
+                  CEP: 35500-053
                 </p>
               </motion.div>
 
-              {/* Card de Canais */}
+              {/* Card de Canais (ATUALIZADO) */}
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -108,8 +109,8 @@ export default function ContatoPage() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Canais de Atendimento</h3>
                 <div className="space-y-2">
-                  <a href="tel:+553732220000" className="flex items-center gap-3 text-slate-600 text-sm hover:text-orange-600 transition-colors">
-                    <Phone size={16} /> (37) 3222-0000
+                  <a href="tel:+553732212942" className="flex items-center gap-3 text-slate-600 text-sm hover:text-orange-600 transition-colors">
+                    <Phone size={16} /> (37) 3221-2942
                   </a>
                   <a href="mailto:contato@dividata.com.br" className="flex items-center gap-3 text-slate-600 text-sm hover:text-orange-600 transition-colors">
                     <Mail size={16} /> contato@dividata.com.br
@@ -117,7 +118,7 @@ export default function ContatoPage() {
                 </div>
               </motion.div>
 
-              {/* Card de Horário (AGORA BRANCO E LIMPO) */}
+              {/* Card de Horário */}
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -133,7 +134,6 @@ export default function ContatoPage() {
                   Segunda a Sexta: 08:00 às 18:00<br />
                   NOC (Monitoramento): 24/7
                 </p>
-                {/* Removido o badge de "Sistemas Operantes" */}
               </motion.div>
 
             </div>
@@ -223,7 +223,7 @@ export default function ContatoPage() {
                           </div>
                         </div>
 
-                        {/* Assunto (SEM TRABALHE CONOSCO) */}
+                        {/* Assunto */}
                         <div className="space-y-2">
                           <label className="text-sm font-semibold text-slate-700">Assunto</label>
                           <select className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all text-slate-800">
@@ -288,8 +288,7 @@ export default function ContatoPage() {
         </div>
       </section>
 
-      {/* 3. MAPA WIDE SECTION */}
-{/* 3. MAPA WIDE SECTION (ESTÁTICO COM PIN PERSONALIZADO) */}
+      {/* 3. MAPA WIDE SECTION (ESTÁTICO COM PIN PERSONALIZADO) */}
       <section className="h-[450px] w-full relative bg-slate-200 overflow-hidden">
         {/* Filtro escuro para estilo Cyberpunk */}
         <div className="absolute inset-0 z-10 pointer-events-none bg-slate-900/30 mix-blend-multiply" />
@@ -297,8 +296,8 @@ export default function ContatoPage() {
         {/* Container do Iframe com pointer-events-none para travar o mapa */}
         <div className="w-full h-full pointer-events-none">
             <iframe 
-              // Link focado exatamente na Av. Antônio Olímpio de Morais, 545
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3744.236869857887!2d-44.89076192402366!3d-20.156238781287565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa0ae6f61538269%3A0x3410129338054690!2sAv.%20Ant%C3%B4nio%20Ol%C3%ADmpio%20de%20Morais%2C%20545%20-%20Centro%2C%20Divin%C3%B3polis%20-%20MG%2C%2035500-005!5e0!3m2!1spt-BR!2sbr!4v1708540000000!5m2!1spt-BR!2sbr"
+              // Link focado na Praça Benedito Valadares, 84
+              src="https://maps.google.com/maps?q=Praça+Benedito+Valadares,84,Divinópolis,MG&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%" 
               height="150%" // Altura maior para compensar o topo e centralizar melhor
               style={{ border: 0, filter: 'grayscale(100%) contrast(1.2)' }} // Grayscale alto contraste
