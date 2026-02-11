@@ -54,7 +54,7 @@ export default function Hero({ onMapReady }: HeroProps) {
             
             {/* Título Principal */}
             <motion.h1 custom={1} initial="hidden" animate="visible" variants={textFadeUp} className="text-5xl md:text-6xl xl:text-7xl font-extrabold text-white leading-[1.05] mb-6 tracking-tight">
-              Processamento de Dados & <br />
+              Processamento de Dados e <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-orange-600 relative">
                 Field Service.
               </span>
