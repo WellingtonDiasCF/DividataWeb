@@ -47,13 +47,14 @@ const CONNECTION_DIST = 90;
 const MAX_NEIGHBORS = 8;
 const TRAIL_LIFETIME = 75; 
 
-const HQ_COORDS = { x: 455, y: 415 }; 
+const HQ_COORDS = { x: 455, y: 415 }; // Divinópolis
+const CTD_COORDS = { x: 410, y: 330 }; // Brasília (Aproximado)
 
 interface Node {
   id: number;
   x: number;
   y: number;
-  isHQ: boolean;
+  isHQ: boolean; // Usado para identificar pontos especiais (HQ e CTD)
   size: number;
   opacity: number;
   dist?: number;
@@ -65,18 +66,18 @@ interface Trail {
   life: number;
 }
 
-// 1. Interface para receber a função do pai
 interface NetworkBackgroundProps {
   onReady?: () => void;
 }
 
-// 2. Recebendo a prop na função
 export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [hoveringHQ, setHoveringHQ] = useState(false);
   
-  // Mantemos um estado local simples apenas para o fade-in do próprio canvas
+  // Estados para as plaquinhas
+  const [hoveringHQ, setHoveringHQ] = useState(false);
+  const [hoveringCTD, setHoveringCTD] = useState(false);
+  
   const [isLocalReady, setIsLocalReady] = useState(false);
   
   const dataRef = useRef<{
@@ -91,8 +92,12 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
 
   useEffect(() => {
     const nodes: Node[] = [];
-    nodes.push({ id: 9999, x: HQ_COORDS.x, y: HQ_COORDS.y, isHQ: true, size: 5, opacity: 1 });
     
+    // 1. Adiciona Pontos Especiais (Brasília e Divinópolis)
+    nodes.push({ id: 9998, x: CTD_COORDS.x, y: CTD_COORDS.y, isHQ: true, size: 5, opacity: 1 }); // CTD
+    nodes.push({ id: 9999, x: HQ_COORDS.x, y: HQ_COORDS.y, isHQ: true, size: 5, opacity: 1 }); // HQ
+    
+    // 2. Adiciona Pontos Aleatórios
     for (let i = 0; i < NODE_COUNT; i++) {
       nodes.push({
         id: i,
@@ -152,7 +157,7 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
       });
 
       nodes.forEach(node => {
-        if (node.isHQ) return; 
+        if (node.isHQ) return; // Não desenha os pontos especiais no canvas estático
         offCtx.fillStyle = `rgba(248, 250, 252, ${node.opacity})`; 
         offCtx.beginPath();
         offCtx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
@@ -161,14 +166,12 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
     }
     dataRef.current.staticCanvas = offCanvas;
 
-    // 3. AQUI ESTÁ A MÁGICA: Avisamos o pai que terminamos
-    // O setTimeout garante que o render do DOM ocorra antes de avisar
     setTimeout(() => {
       setIsLocalReady(true);
       if (onReady) onReady(); 
     }, 100);
 
-  }, [onReady]); // Adicione onReady nas dependências
+  }, [onReady]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -197,23 +200,25 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
         ctx.drawImage(dataRef.current.staticCanvas, VB_X, VB_Y, VB_W, VB_H);
       }
 
-      const hq = dataRef.current.nodes[0]; 
-      if (hq) {
-          pulseTime += 0.05;
+      // Renderiza os pontos especiais (HQ e CTD) com pulso
+      pulseTime += 0.05;
+      const specialNodes = dataRef.current.nodes.filter(n => n.isHQ);
+      
+      specialNodes.forEach(node => {
           ctx.strokeStyle = `rgba(234, 88, 12, ${1 - (pulseTime % 3) / 3})`; 
           ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.arc(hq.x, hq.y, (pulseTime % 3) * 10, 0, Math.PI * 2);
+          ctx.arc(node.x, node.y, (pulseTime % 3) * 10, 0, Math.PI * 2);
           ctx.stroke();
 
           ctx.fillStyle = '#ea580c'; 
           ctx.shadowColor = 'rgba(234, 88, 12, 0.8)';
           ctx.shadowBlur = 15;
           ctx.beginPath();
-          ctx.arc(hq.x, hq.y, 5, 0, Math.PI * 2);
+          ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
           ctx.fill();
           ctx.shadowBlur = 0; 
-      }
+      });
 
       dataRef.current.trails = dataRef.current.trails.filter(t => t.life > 0);
       dataRef.current.trails.forEach(trail => {
@@ -263,8 +268,10 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
     }
 
     setHoveringHQ(closestId === 9999);
+    setHoveringCTD(closestId === 9998); // Detecta CTD
 
-    if (closestId !== -1 && closestId !== 9999) { 
+    // Cria trilhas se passar perto de um nó (ignorando HQ e CTD como âncoras para não bugar)
+    if (closestId !== -1 && closestId !== 9999 && closestId !== 9998) { 
         const anchor = mouseRef.current.anchorNode;
         if (anchor !== null && anchor !== closestId) {
             const path = findPathBFS(anchor, closestId, dataRef.current.nodes, dataRef.current.adjList);
@@ -288,8 +295,7 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        onMouseLeave={() => { mouseRef.current.anchorNode = null; setHoveringHQ(false); }}
-        // Use isLocalReady apenas para garantir que não apareça "travado"
+        onMouseLeave={() => { mouseRef.current.anchorNode = null; setHoveringHQ(false); setHoveringCTD(false); }}
         className={`relative w-full h-full max-w-[1600px] aspect-[1000/1000] scale-[1.7] origin-center translate-x-[12%] translate-y-[8%] transition-opacity duration-1000 ${isLocalReady ? 'opacity-100' : 'opacity-0'}`}
       >
         <canvas ref={canvasRef} className="block w-full h-full" />
@@ -306,9 +312,8 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
             </g>
         </svg>
 
-        {/* Removido o bloco de Loading daqui, pois ele foi para a página principal */}
-
         <AnimatePresence>
+          {/* PLAQUINHA HQ (DIVINÓPOLIS) */}
           {hoveringHQ && (
             <div 
               className="absolute pointer-events-none z-50"
@@ -321,20 +326,38 @@ export default function NetworkBackground({ onReady }: NetworkBackgroundProps) {
                 initial={{ opacity: 0, y: 10, x: "-50%", scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
                 exit={{ opacity: 0, y: 10, x: "-50%", scale: 0.9 }}
-                style={{ 
-                  position: 'absolute',
-                  bottom: 0, 
-                  left: 0,
-                }}
+                style={{ position: 'absolute', bottom: 0, left: 0 }}
                 className="flex flex-col items-center origin-bottom"
               >
-                {/* CAIXA DE TEXTO */}
                 <div className="bg-slate-900/95 border border-orange-500/60 px-3 py-1.5 rounded shadow-2xl backdrop-blur-md text-center min-w-[110px]">
                   <div className="text-white font-bold text-[10px] tracking-[0.15em] uppercase mb-0.5 whitespace-nowrap">SEDE DIVIDATA</div>
                   <div className="text-gray-400 text-[9px] font-medium whitespace-nowrap">Divinópolis - MG</div>
                 </div>
-                
-                {/* TRACINHO VERTICAL */}
+                <div className="w-[1px] h-10 bg-gradient-to-b from-orange-500 via-orange-500/50 to-transparent" />
+              </motion.div>
+            </div>
+          )}
+
+          {/* PLAQUINHA CTD (BRASÍLIA) */}
+          {hoveringCTD && (
+            <div 
+              className="absolute pointer-events-none z-50"
+              style={{ 
+                left: `${((CTD_COORDS.x - VB_X) / VB_W) * 100}%`,
+                top: `${((CTD_COORDS.y - VB_Y) / VB_H) * 100}%`
+              }}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 10, x: "-50%", scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+                exit={{ opacity: 0, y: 10, x: "-50%", scale: 0.9 }}
+                style={{ position: 'absolute', bottom: 0, left: 0 }}
+                className="flex flex-col items-center origin-bottom"
+              >
+                <div className="bg-slate-900/95 border border-orange-500/60 px-3 py-1.5 rounded shadow-2xl backdrop-blur-md text-center min-w-[110px]">
+                  <div className="text-white font-bold text-[10px] tracking-[0.15em] uppercase mb-0.5 whitespace-nowrap">CTD DIVIDATA</div>
+                  <div className="text-gray-400 text-[9px] font-medium whitespace-nowrap">Brasília - DF</div>
+                </div>
                 <div className="w-[1px] h-10 bg-gradient-to-b from-orange-500 via-orange-500/50 to-transparent" />
               </motion.div>
             </div>
