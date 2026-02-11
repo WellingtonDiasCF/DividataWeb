@@ -57,7 +57,7 @@ export default function EmpresaPage() {
               Nossa Identidade
             </span>
             <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-8">
-              40 Anos de <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Evolução Contínua.</span>
+              45 Anos de <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Evolução Contínua.</span>
             </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed font-light">
               Não somos apenas uma empresa de TI. Somos a garantia de que a operação de nossos clientes — seja um banco federal ou um grande varejista — nunca pare.

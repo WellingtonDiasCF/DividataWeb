@@ -41,25 +41,31 @@ export default function Header() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled || isOpen
-            ? 'bg-white/90 backdrop-blur-lg shadow-sm border-b border-gray-100 py-3'
-            : 'bg-transparent py-5'
+            ? 'bg-white/90 backdrop-blur-lg shadow-sm border-b border-gray-100 py-4' // Aumentei um pouco o py aqui também
+            : 'bg-transparent py-6'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             
-            {/* LOGO */}
-            <Link href="/" className="flex items-center gap-2.5 group relative z-50">
-              <div className="bg-orange-600 p-2.5 rounded-xl text-white shadow-lg shadow-orange-500/20 group-hover:bg-orange-700 group-hover:scale-105 transition-all duration-300">
-                <Server size={22} strokeWidth={2.5} />
+            {/* LOGO (AUMENTADO) */}
+            <Link href="/" className="flex items-center gap-3 group relative z-50">
+              
+              {/* Ícone Maior */}
+              <div className="bg-orange-600 p-3 rounded-xl text-white shadow-lg shadow-orange-500/20 group-hover:bg-orange-700 group-hover:scale-105 transition-all duration-300">
+                <Server size={32} strokeWidth={2.5} />
               </div>
+              
               <div className="flex flex-col leading-none">
-                <span className={`text-xl font-extrabold tracking-tight transition-colors ${
+                {/* Texto DIVIDATA Maior */}
+                <span className={`text-3xl font-extrabold tracking-tight transition-colors ${
                   isScrolled || isOpen ? 'text-gray-900' : 'text-white'
                 }`}>
                   DIVIDATA
                 </span>
-                <span className={`text-[9px] sm:text-[10px] font-bold tracking-wider uppercase ${
+                
+                {/* Subtítulo Maior e Ajustado */}
+                <span className={`text-xs font-bold tracking-wider uppercase mt-0.5 ${
                   isScrolled || isOpen ? 'text-orange-600' : 'text-orange-200'
                 }`}>
                   Processamento de Dados
@@ -89,7 +95,7 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* BOTÃO DE AÇÃO (DESKTOP) - ALTERADO PARA TRABALHE CONOSCO */}
+            {/* BOTÃO DE AÇÃO (DESKTOP) */}
             <div className="hidden md:flex items-center">
               <Link
                 href="/trabalhe-conosco"
@@ -117,7 +123,7 @@ export default function Header() {
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: 90, opacity: 0 }}
                   >
-                    <X size={28} />
+                    <X size={32} /> {/* Aumentei o ícone de fechar também */}
                   </motion.div>
                 ) : (
                   <motion.div
@@ -126,7 +132,7 @@ export default function Header() {
                     animate={{ rotate: 0, opacity: 1 }}
                     exit={{ rotate: -90, opacity: 0 }}
                   >
-                    <Menu size={28} />
+                    <Menu size={32} /> {/* Aumentei o ícone de menu também */}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -154,7 +160,7 @@ export default function Header() {
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="fixed top-0 right-0 bottom-0 w-full sm:w-[320px] bg-white z-40 md:hidden shadow-2xl flex flex-col"
             >
-              <div className="h-24" />
+              <div className="h-28" /> {/* Aumentei o espaçamento do topo para não bater no header maior */}
 
               <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-2">
                 <div className="mb-6">
