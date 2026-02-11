@@ -289,28 +289,44 @@ export default function ContatoPage() {
       </section>
 
       {/* 3. MAPA WIDE SECTION */}
-      <section className="h-[400px] w-full relative bg-slate-200">
-        <div className="absolute inset-0 z-10 pointer-events-none mix-blend-saturation bg-slate-900/20" />
+{/* 3. MAPA WIDE SECTION (ESTÁTICO COM PIN PERSONALIZADO) */}
+      <section className="h-[450px] w-full relative bg-slate-200 overflow-hidden">
+        {/* Filtro escuro para estilo Cyberpunk */}
+        <div className="absolute inset-0 z-10 pointer-events-none bg-slate-900/30 mix-blend-multiply" />
         
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3745.3662287955527!2d-44.89437192398418!3d-20.14246998129215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa0b0a8806297fb%3A0x6b86211833d7d7d!2sAv.%20Ant%C3%B4nio%20Ol%C3%ADmpio%20de%20Morais%2C%20545%20-%20Centro%2C%20Divin%C3%B3polis%20-%20MG%2C%2035500-005!5e0!3m2!1spt-BR!2sbr!4v1709669000000!5m2!1spt-BR!2sbr" 
-          width="100%" 
-          height="100%" 
-          style={{ border: 0, filter: 'grayscale(100%) invert(0%)' }}
-          allowFullScreen 
-          loading="lazy" 
-          referrerPolicy="no-referrer-when-downgrade"
-          className="grayscale hover:grayscale-0 transition-all duration-700"
-        ></iframe>
+        {/* Container do Iframe com pointer-events-none para travar o mapa */}
+        <div className="w-full h-full pointer-events-none">
+            <iframe 
+              // Link focado exatamente na Av. Antônio Olímpio de Morais, 545
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3744.236869857887!2d-44.89076192402366!3d-20.156238781287565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa0ae6f61538269%3A0x3410129338054690!2sAv.%20Ant%C3%B4nio%20Ol%C3%ADmpio%20de%20Morais%2C%20545%20-%20Centro%2C%20Divin%C3%B3polis%20-%20MG%2C%2035500-005!5e0!3m2!1spt-BR!2sbr!4v1708540000000!5m2!1spt-BR!2sbr"
+              width="100%" 
+              height="150%" // Altura maior para compensar o topo e centralizar melhor
+              style={{ border: 0, filter: 'grayscale(100%) contrast(1.2)' }} // Grayscale alto contraste
+              allowFullScreen={false}
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              // 'pointer-events-none' aqui garante que o usuário não arraste o mapa
+              className="grayscale relative z-0 -mt-[10%]" 
+            ></iframe>
+        </div>
         
-        {/* Pin Personalizado */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
-           <div className="relative">
-              <div className="w-4 h-4 bg-orange-600 rounded-full animate-ping absolute top-0 left-0" />
-              <div className="w-12 h-12 bg-primary-dark text-white rounded-full flex items-center justify-center shadow-2xl border-2 border-white relative z-10">
-                 <Building2 size={20} />
+        {/* PIN PERSONALIZADO (Fixo no centro da tela) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none mt-4">
+           <div className="relative flex flex-col items-center group">
+              {/* Círculo Pulsante */}
+              <div className="w-16 h-16 bg-orange-600/30 rounded-full animate-ping absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              
+              {/* O Pin em si */}
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-primary-dark text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(234,88,12,0.5)] border-[3px] border-orange-500 relative z-10 mb-2">
+                    <Building2 size={24} />
+                </div>
+                {/* Triângulo inferior do pin */}
+                <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[14px] border-t-orange-500 absolute left-1/2 -translate-x-1/2 bottom-[-10px]" />
               </div>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white px-3 py-1 rounded shadow-lg whitespace-nowrap text-xs font-bold text-slate-800">
+              
+              {/* Label do Pin */}
+              <div className="mt-4 bg-white px-4 py-2 rounded-lg shadow-xl whitespace-nowrap text-sm font-bold text-slate-900 border border-slate-200">
                  HQ Dividata
               </div>
            </div>

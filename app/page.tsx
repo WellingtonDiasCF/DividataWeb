@@ -11,7 +11,6 @@ export default function Home() {
   const [isMapReady, setIsMapReady] = useState(false);
   const [isAnimationDone, setIsAnimationDone] = useState(false);
 
-  // Scroll Reset
   useEffect(() => {
     if (typeof window !== 'undefined' && 'scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -19,27 +18,27 @@ export default function Home() {
     window.scrollTo(0, 0);
   }, []);
 
-  // Lógica: Só sai do loading se o mapa estiver pronto E a animação tiver terminado
   const showLoading = !isMapReady || !isAnimationDone;
 
   return (
     <main className="bg-white min-h-screen relative overflow-x-hidden">
       
-      {/* O Loading agora controla sua própria saída visual com AnimatePresence */}
       <AnimatePresence>
         {showLoading && (
           <LoadingScreen onComplete={() => setIsAnimationDone(true)} />
         )}
       </AnimatePresence>
 
-      {/* Conteúdo do site */}
       <div className={`transition-opacity duration-1000 delay-200 ${showLoading ? 'opacity-0' : 'opacity-100'}`}>
         <Header />
         
-        {/* Hero avisa: "Cálculos matemáticos terminaram" */}
         <Hero onMapReady={() => setIsMapReady(true)} />
         
-        <About />
+        {/* --- ADICIONE O ID AQUI --- */}
+        <div id="proxima-sessao">
+           <About />
+        </div>
+        
         {/* Outras seções... */}
       </div>
     </main>
